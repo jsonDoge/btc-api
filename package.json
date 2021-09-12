@@ -1,0 +1,22 @@
+{
+  "name": "btc-api",
+  "version": "1.0.0",
+  "description": "cached btc price api",
+  "main": "index.js",
+  "engines": {
+    "node": ">=15.0.0 <16.0.0"
+  },
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "doge",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1"
+  }
+}

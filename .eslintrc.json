@@ -1,0 +1,55 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "eslint-config-airbnb-base"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 10
+  },
+  "rules": {
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "strict": [
+      "error",
+      "global"
+    ],
+    "no-shadow": "off",
+    "dot-notation": "off",
+    "no-alert": "warn",
+    "no-await-in-loop": "off",
+    "no-native-reassign": "warn",
+    "no-console": "off",
+    "consistent-return": "off",
+    "prefer-arrow-callback": "off",
+    "func-names": "off",
+    "no-underscore-dangle": "error",
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "require-atomic-updates": "off",
+    "semi": [
+      "error",
+      "never"
+    ],
+    "semi-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "semi-style": [
+      "error",
+      "last"
+    ],
+    "no-extra-semi": "error",
+    "no-continue": "off"
+  }
+}
