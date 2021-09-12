@@ -3,17 +3,24 @@ const express = require('express')
 const axios = require('axios').default
 
 const { getErrorObj } = require('./src/utils')
+const redisClient = require('./src/redisClient')
 
 const { env } = process
 const app = express()
-axios.defaults.headers.common['X-CoinAPI-Key'] = env.API_KEY
+axios.defaults.headers.common['X-CoinAPI-Key'] = env.CONAPI_KEY
 
 app.get('/', (req, res) => {
   res.send('Hello!')
 })
 
 app.get('/api/v1/price', async (req, res) => {
-  const priceUrl = `${env.BTCUSD_SOURCE_URL}/exchangerate/BTC/USD`
+  const cachedPrice = JSON.parse(await redisClient.get('price'))
+
+  if (cachedPrice) {
+    return res.json({ result: { price: cachedPrice } })
+  }
+
+  const priceUrl = `${env.COINAPI_URL}/exchangerate/BTC/USD`
 
   let response
   try {
@@ -31,11 +38,19 @@ app.get('/api/v1/price', async (req, res) => {
       .json(getErrorObj('Failed to fetch price', 'Unknown'))
   }
 
+  await redisClient.setex('price', env.PRICE_CACHE_SECS, price)
+
   res.json({ result: { price } })
 })
 
 app.get('/api/v1/hist', async (req, res) => {
-  const histUrl = `${env.BTCUSD_SOURCE_URL}/ohlcv/COINBASE_SPOT_BTC_USD/latest?period_id=10MIN`
+  const cachedHist = JSON.parse(await redisClient.get('hist'))
+
+  if (cachedHist) {
+    return res.json({ result: { hist: cachedHist } })
+  }
+
+  const histUrl = `${env.COINAPI_URL}/ohlcv/COINBASE_SPOT_BTC_USD/latest?period_id=10MIN`
 
   let response
   try {
@@ -53,9 +68,11 @@ app.get('/api/v1/hist', async (req, res) => {
       .json(getErrorObj('Failed to fetch history', 'Unknown'))
   }
 
+  await redisClient.setex('hist', env.HIST_CACHE_SECS, JSON.stringify(hist))
+
   res.json({ result: { hist } })
 })
 
-app.listen(env.port, () => {
-  console.log(`Listening on http://localhost:${env.port}`)
+app.listen(env.API_PORT, () => {
+  console.log(`Listening on http://localhost:${env.API_PORT}`)
 })

@@ -4,9 +4,17 @@ BTC current and historical price API with Redis caching.
 
 ## Installation
 
+Install dependencies
+
 ```bash
 npm i
 ```
+
+Start redis - use standalone installation or use docker:
+
+```bash
+ docker run --name some-redis -p 6379:6379 -d redis
+ ```
 
 ## Usage
 
@@ -19,6 +27,12 @@ npm start
 - / [Hello!]
 - /api/v1/price [current BTC price]
 - /api/v1/hist [10min intervals latest 100 candles]
+
+## Caching
+
+Redis is used for caching, endpoints cache durations are:
+  - price - 10 seconds
+  - history - 10 minutes
 
 ## Bitcoin price source
 
