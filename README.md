@@ -4,6 +4,8 @@ BTC current and historical price API with Redis caching.
 
 ## Installation
 
+Recommended to generate your own API keys (free), read "Bitcoin price source" section. And place them in .env -> COINAPI_KEY
+
 Only mandatory if you don't want to use docker-compose, otherwise skip to usage -> docker-compose
 
 Install dependencies
