@@ -11,8 +11,10 @@ redisClient.on('error', (error) => {
 
 const get = promisify(redisClient.get).bind(redisClient)
 const setex = promisify(redisClient.setex).bind(redisClient)
+const flushall = promisify(redisClient.flushall).bind(redisClient)
 
 module.exports = {
   get,
   setex,
+  flushall,
 }

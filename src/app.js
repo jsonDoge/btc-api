@@ -17,7 +17,8 @@ app.get('/api/v1/price', wrapAsync(async (req, res) => {
   const cachedPrice = JSON.parse(await redisClient.get('price'))
 
   if (cachedPrice) {
-    return res.json({ result: { price: cachedPrice } })
+    res.set('Expire', new Date(cachedPrice.expire).toUTCString())
+    return res.json({ result: { price: cachedPrice.value } })
   }
 
   const priceUrl = `${env.COINAPI_URL}/exchangerate/BTC/USD`
@@ -37,9 +38,10 @@ app.get('/api/v1/price', wrapAsync(async (req, res) => {
       .status(500)
       .json(getErrorObj('Failed to fetch price', 'Unknown'))
   }
+  const expire = Date.now() + env.PRICE_CACHE_SECS * 1000
+  await redisClient.setex('price', env.PRICE_CACHE_SECS, JSON.stringify({ value: price, expire }))
 
-  await redisClient.setex('price', env.PRICE_CACHE_SECS, price)
-
+  res.set('Expire', new Date(expire).toUTCString())
   res.json({ result: { price } })
 }))
 
@@ -47,7 +49,8 @@ app.get('/api/v1/hist', wrapAsync(async (req, res) => {
   const cachedHist = JSON.parse(await redisClient.get('hist'))
 
   if (cachedHist) {
-    return res.json({ result: { hist: cachedHist } })
+    res.set('Expire', new Date(cachedHist.expire).toUTCString())
+    return res.json({ result: { hist: cachedHist.value } })
   }
 
   const histUrl = `${env.COINAPI_URL}/ohlcv/COINBASE_SPOT_BTC_USD/latest?period_id=10MIN`
@@ -68,8 +71,10 @@ app.get('/api/v1/hist', wrapAsync(async (req, res) => {
       .json(getErrorObj('Failed to fetch history', 'Unknown'))
   }
 
-  await redisClient.setex('hist', env.HIST_CACHE_SECS, JSON.stringify(hist))
+  const expire = Date.now() + env.HIST_CACHE_SECS * 1000
+  await redisClient.setex('hist', env.HIST_CACHE_SECS, JSON.stringify({ value: hist, expire }))
 
+  res.set('Expire', new Date(expire).toUTCString())
   res.json({ result: { hist } })
 }))
 

@@ -51,6 +51,8 @@ Redis is used for caching, endpoints cache durations are:
 
 *history is not cached for 10min, because the latest candle is constantly being updated.
 
+Caching can be tracked using the Etag and Expire headers.
+
 ## Bitcoin price source
 
 The API uses coinAPI REST API underneath for data.
@@ -66,3 +68,12 @@ Free API will help check that caching actually works, otherwise the proxying wil
 Source API key can be generated here: https://www.coinapi.io/pricing -> "GET A FREE API KEY"
 
 *Default source API key is already committed
+
+## Testing 
+
+There is only one integration test verifying that Etag and Expire match if two consequitive calls are made.
+WARNING: Tests require you to have a running redis and they will clear it before running tests.
+
+## Known problems
+
+- API can be improved further by not allowing to DOS an endpoint upon cache is cleared. As it still takes time to fetch new data and update the cache. During that time each request will still reach the proxy.
