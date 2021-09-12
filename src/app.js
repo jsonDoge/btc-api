@@ -7,7 +7,7 @@ const { routeErrorHandler } = require('./middleware')
 
 const { env } = process
 const app = express()
-axios.defaults.headers.common['X-CoinAPI-Key'] = env.CONAPI_KEY
+axios.defaults.headers.common['X-CoinAPI-Key'] = env.COINAPI_KEY
 
 app.get('/', (req, res) => {
   res.send('Hello!')
