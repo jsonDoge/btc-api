@@ -4,7 +4,7 @@
   "description": "cached btc price api",
   "main": "index.js",
   "engines": {
-    "node": ">=15.0.0 <16.0.0"
+    "node": ">=16.9.1 <17.0.0"
   },
   "scripts": {
     "start": "node ./index.js"

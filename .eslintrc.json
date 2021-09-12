@@ -8,7 +8,7 @@
     "es6": true
   },
   "parserOptions": {
-    "ecmaVersion": 10
+    "ecmaVersion": 11
   },
   "rules": {
     "quotes": [
