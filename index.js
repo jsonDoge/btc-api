@@ -2,8 +2,9 @@ require('dotenv').config()
 const express = require('express')
 const axios = require('axios').default
 
-const { getErrorObj } = require('./src/utils')
 const redisClient = require('./src/redisClient')
+const { getErrorObj, wrapAsync } = require('./src/utils')
+const { routeErrorHandler } = require('./src/middleware')
 
 const { env } = process
 const app = express()
@@ -13,7 +14,7 @@ app.get('/', (req, res) => {
   res.send('Hello!')
 })
 
-app.get('/api/v1/price', async (req, res) => {
+app.get('/api/v1/price', wrapAsync(async (req, res) => {
   const cachedPrice = JSON.parse(await redisClient.get('price'))
 
   if (cachedPrice) {
@@ -41,9 +42,9 @@ app.get('/api/v1/price', async (req, res) => {
   await redisClient.setex('price', env.PRICE_CACHE_SECS, price)
 
   res.json({ result: { price } })
-})
+}))
 
-app.get('/api/v1/hist', async (req, res) => {
+app.get('/api/v1/hist', wrapAsync(async (req, res) => {
   const cachedHist = JSON.parse(await redisClient.get('hist'))
 
   if (cachedHist) {
@@ -71,8 +72,14 @@ app.get('/api/v1/hist', async (req, res) => {
   await redisClient.setex('hist', env.HIST_CACHE_SECS, JSON.stringify(hist))
 
   res.json({ result: { hist } })
-})
+}))
 
 app.listen(env.API_PORT, () => {
   console.log(`Listening on http://localhost:${env.API_PORT}`)
 })
+
+app.use(function (req, res) {
+  res.status(404).json(getErrorObj('Invalid route', 'Route does not exist'))
+})
+
+app.use(routeErrorHandler)
