@@ -3,9 +3,7 @@ const redis = require('redis')
 
 const { env } = process
 
-const redisClient = redis.createClient({
-  port: env.REDIS_PORT,
-})
+const redisClient = redis.createClient(env.REDIS_URL)
 
 redisClient.on('error', (error) => {
   console.error(error)

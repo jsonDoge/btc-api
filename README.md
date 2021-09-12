@@ -4,13 +4,15 @@ BTC current and historical price API with Redis caching.
 
 ## Installation
 
+Only mandatory if you don't want to use docker-compose, otherwise skip to usage -> docker-compose
+
 Install dependencies
 
 ```bash
 npm i
 ```
 
-Start redis - use standalone installation or use docker:
+Start redis - use standalone installation or docker:
 
 ```bash
  docker run --name some-redis -p 6379:6379 -d redis
@@ -18,9 +20,21 @@ Start redis - use standalone installation or use docker:
 
 ## Usage
 
+if installed manually
+
 ```bash
 npm start
 ```
+
+*DOCKER-COMPOSE* (if "Installation" skipped)
+
+In project root run
+
+```bash
+docker-compose up
+ ```
+
+Default API root: http://localhost:3000
 
 ## Endpoints
 
@@ -49,4 +63,6 @@ The free coinAPI limits max API request to 100 per 24h. Endpoints used here are
 
 Free API will help check that caching actually works, otherwise the proxying will get rate limited.
 
-API key can be generated here: https://www.coinapi.io/pricing -> "GET A FREE API KEY"
+Source API key can be generated here: https://www.coinapi.io/pricing -> "GET A FREE API KEY"
+
+*Default source API key is already committed

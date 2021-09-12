@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: btc-api
+    environment:
+      - REDIS_URL=redis://btc-api-redis:6379
+    depends_on: 
+      - redis
+    ports:
+      - 3000:3000
+  redis:
+    image: redis
+    container_name: btc-api-redis
+    expose:
+      - 6379
