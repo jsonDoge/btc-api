@@ -24,15 +24,18 @@ npm start
 
 ## Endpoints
 
-- / [Hello!]
-- /api/v1/price [current BTC price]
-- /api/v1/hist [10min intervals latest 100 candles]
+  - / [Hello!]
+  - /api/v1/price [current BTC price]
+  - /api/v1/hist [10min intervals latest 100 candles]
 
 ## Caching
 
 Redis is used for caching, endpoints cache durations are:
+    
   - price - 10 seconds
-  - history - 10 minutes
+  - history - 1 minute
+
+*history is not cached for 10min, because the latest candle is constantly being updated.
 
 ## Bitcoin price source
 
