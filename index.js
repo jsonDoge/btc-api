@@ -1,16 +1,17 @@
 require('dotenv').config()
 const express = require('express')
-const axios = require('axios')
+const axios = require('axios').default
 
 const { env } = process
 const app = express()
+axios.defaults.headers.common['X-CoinAPI-Key'] = env.API_KEY
 
 app.get('/', (req, res) => {
   res.send('Hello!')
 })
 
 app.get('/api/v1/price', async (req, res) => {
-  const priceUrl = `${env.BTCUSD_SOURCE_URL}/price`
+  const priceUrl = `${env.BTCUSD_SOURCE_URL}/exchangerate/BTC/USD`
 
   let response
   try {
@@ -24,9 +25,9 @@ app.get('/api/v1/price', async (req, res) => {
     })
   }
 
-  const { price } = response?.data?.result || {}
+  const { rate } = response?.data || {}
 
-  res.json({ result: { price } })
+  res.json({ result: { price: rate } })
 })
 
 app.listen(env.port, () => {
