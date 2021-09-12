@@ -74,12 +74,14 @@ app.get('/api/v1/hist', wrapAsync(async (req, res) => {
   res.json({ result: { hist } })
 }))
 
-app.listen(env.API_PORT, () => {
-  console.log(`Listening on http://localhost:${env.API_PORT}`)
-})
-
-app.use(function (req, res) {
-  res.status(404).json(getErrorObj('Invalid route', 'Route does not exist'))
+app.use((req, res) => {
+  res
+    .status(404)
+    .json(getErrorObj('Invalid route address', 'Route does not exist'))
 })
 
 app.use(routeErrorHandler)
+
+app.listen(env.API_PORT, () => {
+  console.log(`Listening on http://localhost:${env.API_PORT}`)
+})
