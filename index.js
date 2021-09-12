@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const axios = require('axios').default
 
+const { getErrorObj } = require('./src/utils')
+
 const { env } = process
 const app = express()
 axios.defaults.headers.common['X-CoinAPI-Key'] = env.API_KEY
@@ -17,15 +19,17 @@ app.get('/api/v1/price', async (req, res) => {
   try {
     response = await axios.get(priceUrl)
   } catch (e) {
-    return res.status(500).json({
-      error: {
-        message: 'Failed to fetch price',
-        reason: e.message,
-      },
-    })
+    return res
+      .status(500)
+      .json(getErrorObj('Failed to fetch price', e.message))
   }
 
   const { rate } = response?.data || {}
+  if (!rate) {
+    return res
+      .status(500)
+      .json(getErrorObj('Failed to fetch price', 'Unknown'))
+  }
 
   res.json({ result: { price: rate } })
 })
@@ -37,15 +41,17 @@ app.get('/api/v1/hist', async (req, res) => {
   try {
     response = await axios.get(histUrl)
   } catch (e) {
-    return res.status(500).json({
-      error: {
-        message: 'Failed to fetch hist',
-        reason: e.message,
-      },
-    })
+    return res
+      .status(500)
+      .json(getErrorObj('Failed to fetch history', e.message))
   }
 
   const hist = response?.data
+  if (!hist || !Array.isArray(hist)) {
+    return res
+      .status(500)
+      .json(getErrorObj('Failed to fetch history', 'Unknown'))
+  }
 
   res.json({ result: { hist } })
 })
