@@ -17,11 +17,9 @@ app.get('/api/v1/price', wrapAsync(async (req, res) => {
   const cachedPrice = JSON.parse(await redisClient.get('price'))
 
   if (cachedPrice) {
-    console.log('Cached')
     return res.json({ result: { price: cachedPrice } })
   }
 
-  console.log('price called')
   const priceUrl = `${env.COINAPI_URL}/exchangerate/BTC/USD`
 
   let response
@@ -49,12 +47,8 @@ app.get('/api/v1/hist', wrapAsync(async (req, res) => {
   const cachedHist = JSON.parse(await redisClient.get('hist'))
 
   if (cachedHist) {
-    console.log('Cached')
-
     return res.json({ result: { hist: cachedHist } })
   }
-
-  console.log('hist called')
 
   const histUrl = `${env.COINAPI_URL}/ohlcv/COINBASE_SPOT_BTC_USD/latest?period_id=10MIN`
 
