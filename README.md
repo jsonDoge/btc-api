@@ -18,7 +18,7 @@ npm start
 
 - / [Hello!]
 - /api/v1/price [current BTC price]
-- /api/v1/hist [10min intervals last 10 candles]
+- /api/v1/hist [10min intervals latest 100 candles]
 
 ## Bitcoin price source
 
