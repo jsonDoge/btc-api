@@ -24,14 +24,14 @@ app.get('/api/v1/price', async (req, res) => {
       .json(getErrorObj('Failed to fetch price', e.message))
   }
 
-  const { rate } = response?.data || {}
-  if (!rate) {
+  const { rate: price } = response?.data || {}
+  if (!price) {
     return res
       .status(500)
       .json(getErrorObj('Failed to fetch price', 'Unknown'))
   }
 
-  res.json({ result: { price: rate } })
+  res.json({ result: { price } })
 })
 
 app.get('/api/v1/hist', async (req, res) => {
