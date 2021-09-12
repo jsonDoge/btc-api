@@ -48,3 +48,5 @@ The free coinAPI limits max API request to 100 per 24h. Endpoints used here are
 - current price [https://rest.coinapi.io/v1/exchangerate/BTC/USD]
 
 Free API will help check that caching actually works, otherwise the proxying will get rate limited.
+
+API key can be generated here: https://www.coinapi.io/pricing -> "GET A FREE API KEY"
